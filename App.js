@@ -7,6 +7,8 @@ import HomeScreen from "./app/screens/HomeScreen";
 import ProfileScreen from "./app/screens/ProfileScreen";
 import ProviderScreen from "./app/screens/ProviderScreen";
 
+import colors from "./app/config/colors";
+
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -18,8 +20,26 @@ export default function App() {
 					component={HomeScreen}
 					options={{ title: "Healthadvisor", headerShown: false }}
 				/>
-				<Stack.Screen name="Profile" component={ProfileScreen} />
-				<Stack.Screen name="Provider" component={ProviderScreen} />
+				<Stack.Screen
+					name="Profile"
+					component={ProfileScreen}
+					options={{
+						headerTintColor: colors.primary,
+						headerTitleStyle: {
+							fontWeight: "bold",
+						},
+					}}
+				/>
+				<Stack.Screen
+					name="Provider"
+					component={ProviderScreen}
+					options={{
+						headerTintColor: colors.primary,
+						headerTitleStyle: {
+							fontWeight: "bold",
+						},
+					}}
+				/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	);

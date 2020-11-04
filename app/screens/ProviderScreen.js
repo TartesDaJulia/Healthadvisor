@@ -1,6 +1,8 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
-import { Rating, AirbnbRating } from "react-native-elements";
+import { AirbnbRating } from "react-native-elements";
+
+import colors from "../config/colors";
 
 function ProviderScreen({ route, navigation }) {
 	const { title, phoneNumber, waitTime, rating, reviews } = route.params;
@@ -14,12 +16,16 @@ function ProviderScreen({ route, navigation }) {
 						size={20}
 						isDisabled={true}
 						showRating={false}
-						selectedColor={"green"}
+						selectedColor={colors.primary}
 					/>
-					<Text style={styles.providerRatings}>({reviews} Reviews)</Text>
+					<Text style={styles.providerRatings}>
+						({reviews} Reviews)
+					</Text>
 				</View>
 
-				<Text style={styles.providerPhone}>Phone Number: {phoneNumber}</Text>
+				<Text style={styles.providerPhone}>
+					Phone Number: {phoneNumber}
+				</Text>
 			</View>
 			<Image
 				style={styles.providerImage}

@@ -1,6 +1,8 @@
 import React from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 
+import colors from "../config/colors";
+
 function ProfileScreen({ route, navigation }) {
 	const { firstName, lastName, email } = route.params;
 	return (
@@ -28,7 +30,7 @@ const styles = StyleSheet.create({
 	},
 	containerImageAndDetails: {},
 	details: {
-		color: "green",
+		color: colors.primary,
 		fontSize: 22,
 	},
 	userImage: {

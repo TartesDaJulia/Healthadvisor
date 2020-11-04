@@ -10,92 +10,15 @@ import {
 	Pressable,
 	Image,
 } from "react-native";
+
 import { TouchableOpacity } from "react-native-gesture-handler";
 import ProviderFragmentScreen from "./ProviderFragmentScreen";
 
+import colors from "../config/colors";
+import data from "../config/data";
+
 function HomeScreen({ navigation }) {
-	const DATA = [
-		{
-			id: "1",
-			title: "Provider 1",
-			phoneNumber: "255 111 111",
-			waitTime: "10 minutes",
-			rating: "4",
-			reviews: "111",
-		},
-		{
-			id: "2",
-			title: "Provider 2",
-			phoneNumber: "255 222 222",
-			waitTime: "20 minutes",
-			rating: "5",
-			reviews: "222",
-		},
-		{
-			id: "3",
-			title: "Provider 3",
-			phoneNumber: "255 333 333",
-			waitTime: "30 minutes",
-			rating: "3",
-			reviews: "333",
-		},
-		{
-			id: "4",
-			title: "Provider 4",
-			phoneNumber: "255 444 444",
-			waitTime: "40 minutes",
-			rating: "4",
-			reviews: "444",
-		},
-		{
-			id: "5",
-			title: "Provider 5",
-			phoneNumber: "255 555 555",
-			waitTime: "50 minutes",
-			rating: "5",
-			reviews: "555",
-		},
-		{
-			id: "6",
-			title: "Provider 6",
-			phoneNumber: "255 666 666",
-			waitTime: "60 minutes",
-			rating: "1",
-			reviews: "666",
-		},
-		{
-			id: "7",
-			title: "Provider 7",
-			phoneNumber: "255 777 777",
-			waitTime: "70 minutes",
-			rating: "2",
-			reviews: "777",
-		},
-		{
-			id: "8",
-			title: "Provider 8",
-			phoneNumber: "255 888 888",
-			waitTime: "80 minutes",
-			rating: "3",
-			reviews: "888",
-		},
-		{
-			id: "9",
-			title: "Provider 9",
-			phoneNumber: "255 999 999",
-			waitTime: "90 minutes",
-			rating: "4",
-			reviews: "999",
-		},
-		{
-			id: "10",
-			title: "Provider 10",
-			phoneNumber: "255 101 010",
-			waitTime: "100 minutes",
-			rating: "5",
-			reviews: "1010",
-		},
-	];
+	const DATA = data;
 
 	const [searchText, setSearchText] = useState("");
 
@@ -180,7 +103,7 @@ const styles = StyleSheet.create({
 		justifyContent: "space-between",
 	},
 	headerText: {
-		color: "green",
+		color: colors.primary,
 		fontWeight: "bold",
 		fontSize: 32,
 	},
@@ -201,7 +124,7 @@ const styles = StyleSheet.create({
 	},
 	textInput: {},
 	textInputContainer: {
-		borderBottomColor: "black",
+		borderBottomColor: colors.black,
 		borderBottomWidth: 0.5,
 	},
 });
