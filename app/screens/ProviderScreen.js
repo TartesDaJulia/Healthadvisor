@@ -1,11 +1,46 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, FlatList } from "react-native";
 import { AirbnbRating } from "react-native-elements";
+
+import CommentFragmentScreen from "./CommentFragmentScreen";
+import REVIEWS from "../config/ratingsDB";
 
 import colors from "../config/colors";
 
+function GetReviews(id) {
+	console.log(id);
+	var reviews = new Array();
+	var i = 0;
+	REVIEWS.forEach((review) => {
+		if (id == review.institution) {
+			reviews.push({});
+			reviews[i].id = review.id;
+			reviews[i].person = review.person;
+			reviews[i].score = review.score;
+			reviews[i].comment = review.comment;
+			reviews[i].timeStamp = review.timeStamp;
+			i++;
+		}
+	});
+	return reviews;
+}
+
 function ProviderScreen({ route, navigation }) {
-	const { title, phoneNumber, waitTime, rating, reviews } = route.params;
+	const ratings = REVIEWS;
+
+	const { id, title, phoneNumber, waitTime, rating, reviews } = route.params;
+
+	const reviewsTreated = GetReviews(id);
+
+	const renderItem = ({ item }) => (
+		<CommentFragmentScreen
+			person={item.person}
+			comment={item.comment}
+			timeStamp={item.timeStamp}
+			rating={item.score}
+		/>
+	);
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.detailsContainer}>
@@ -34,6 +69,12 @@ function ProviderScreen({ route, navigation }) {
 			<Text style={styles.providerWaitTime}>
 				Estimated wait time: {waitTime}
 			</Text>
+			<FlatList
+				style={styles.reviewList}
+				data={reviewsTreated}
+				renderItem={renderItem}
+				keyExtractor={(item) => item.id}
+			/>
 		</View>
 	);
 }
@@ -69,6 +110,7 @@ const styles = StyleSheet.create({
 	containerRating: {
 		flexDirection: "row",
 	},
+	reviewList: {},
 });
 
 export default ProviderScreen;

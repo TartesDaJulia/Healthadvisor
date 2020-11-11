@@ -1,4 +1,4 @@
-const DATA = [
+const PROVIDERS = [
 	{
 		id: "1",
 		title: "Provider 1",
@@ -81,4 +81,4 @@ const DATA = [
 	},
 ];
 
-export default DATA;
+export default PROVIDERS;

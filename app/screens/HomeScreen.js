@@ -15,10 +15,42 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import ProviderFragmentScreen from "./ProviderFragmentScreen";
 
 import colors from "../config/colors";
-import data from "../config/data";
+import PROVIDERS from "../config/providersDB";
+import REVIEWS from "../config/ratingsDB";
+
+function CalculateReviews(institutionId) {
+	const ratings = REVIEWS;
+
+	var total = 0;
+	var sum = 0;
+	var rating = 0;
+
+	ratings.forEach((review) => {
+		if (review.institution == institutionId) {
+			total = total + 1;
+			sum = sum + parseInt(review.score);
+		}
+	});
+
+	if (total != 0) {
+		rating = sum / total;
+		rating = Math.round(rating);
+	}
+
+	return [total, rating];
+}
 
 function HomeScreen({ navigation }) {
-	const DATA = data;
+	const DATA = PROVIDERS;
+	const ratings = REVIEWS;
+
+	var instReviews = 0;
+	var instRating = 0;
+	DATA.forEach((inst) => {
+		[instReviews, instRating] = CalculateReviews(inst.id);
+		inst.reviews = instReviews;
+		inst.rating = instRating;
+	});
 
 	const [searchText, setSearchText] = useState("");
 
@@ -27,8 +59,8 @@ function HomeScreen({ navigation }) {
 	};
 
 	const handleFragmentTouched = (item) => {
-		console.log(item.id);
 		navigation.navigate("Provider", {
+			id: item.id,
 			title: item.title,
 			phoneNumber: item.phoneNumber,
 			waitTime: item.waitTime,

@@ -5,7 +5,7 @@
 -   [ ] Create screens
     -   [x] Home Screen
     -   [x] Institution details screen
-        -   [ ] List with comments and ratings
+        -   [x] List with comments and ratings
     -   [ ] Institution specialties screen
     -   [ ] Institution editing screen
     -   [x] Profile details screen
@@ -15,3 +15,6 @@
     -   [ ] Login/Register screen
 
 -   [ ] Implement search
+
+----------------
+- [x] Fix numReviews in CalculateReviews 
