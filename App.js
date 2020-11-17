@@ -6,6 +6,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "./app/screens/HomeScreen";
 import ProfileScreen from "./app/screens/ProfileScreen";
 import ProviderScreen from "./app/screens/ProviderScreen";
+import SpecialtiesScreen from "./app/screens/SpecialtiesScreen";
 
 import colors from "./app/config/colors";
 
@@ -33,6 +34,16 @@ export default function App() {
 				<Stack.Screen
 					name="Provider"
 					component={ProviderScreen}
+					options={{
+						headerTintColor: colors.primary,
+						headerTitleStyle: {
+							fontWeight: "bold",
+						},
+					}}
+				/>
+				<Stack.Screen
+					name="ProviderSpecialties"
+					component={SpecialtiesScreen}
 					options={{
 						headerTintColor: colors.primary,
 						headerTitleStyle: {

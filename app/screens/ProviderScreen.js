@@ -1,6 +1,14 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, FlatList } from "react-native";
+import {
+	View,
+	Text,
+	StyleSheet,
+	Image,
+	FlatList,
+	Pressable,
+} from "react-native";
 import { AirbnbRating } from "react-native-elements";
+import Icon from "react-native-vector-icons/AntDesign";
 
 import CommentFragmentScreen from "./CommentFragmentScreen";
 import REVIEWS from "../config/ratingsDB";
@@ -53,14 +61,9 @@ function ProviderScreen({ route, navigation }) {
 						showRating={false}
 						selectedColor={colors.primary}
 					/>
-					<Text style={styles.providerRatings}>
-						({reviews} Reviews)
-					</Text>
+					<Text style={styles.providerRatings}>({reviews} Reviews)</Text>
 				</View>
-
-				<Text style={styles.providerPhone}>
-					Phone Number: {phoneNumber}
-				</Text>
+				<Text style={styles.providerPhone}>Phone Number: {phoneNumber}</Text>
 			</View>
 			<Image
 				style={styles.providerImage}
@@ -69,6 +72,20 @@ function ProviderScreen({ route, navigation }) {
 			<Text style={styles.providerWaitTime}>
 				Estimated wait time: {waitTime}
 			</Text>
+
+			<Pressable
+				android_ripple={{ color: "gray", borderless: false }}
+				onPress={() => navigation.navigate("ProviderSpecialties", { id: id })}
+				style={styles.specialtyPressable}
+			>
+				<Text style={styles.specialtyText}>View Specialties available</Text>
+				<Icon
+					name="arrowright"
+					size={28}
+					color={colors.white}
+					style={styles.specialtyIcon}
+				/>
+			</Pressable>
 			<FlatList
 				style={styles.reviewList}
 				data={reviewsTreated}
@@ -80,6 +97,9 @@ function ProviderScreen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
+	test: {
+		backgroundColor: colors.primary,
+	},
 	container: {
 		flex: 1,
 		marginLeft: 10,
@@ -105,12 +125,29 @@ const styles = StyleSheet.create({
 		fontSize: 30,
 	},
 	providerWaitTime: {
-		fontSize: 12,
+		fontSize: 16,
 	},
 	containerRating: {
 		flexDirection: "row",
 	},
 	reviewList: {},
+	specialtyPressable: {
+		elevation: 8,
+		backgroundColor: colors.primary,
+		flex: 1,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
+		maxHeight: 50,
+	},
+	specialtyIcon: {
+		paddingRight: 8,
+	},
+	specialtyText: {
+		paddingLeft: 8,
+		fontSize: 28,
+		color: colors.white,
+	},
 });
 
 export default ProviderScreen;
