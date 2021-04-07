@@ -8,12 +8,15 @@ import {
 	Pressable,
 } from "react-native";
 import { AirbnbRating } from "react-native-elements";
+import * as Linking from "expo-linking";
+
 import Icon from "react-native-vector-icons/AntDesign";
 
 import CommentFragmentScreen from "./CommentFragmentScreen";
 import REVIEWS from "../config/ratingsDB";
 
 import colors from "../config/colors";
+import sizes from "../config/fontSizes";
 
 function GetReviews(id) {
 	console.log(id);
@@ -31,6 +34,10 @@ function GetReviews(id) {
 		}
 	});
 	return reviews;
+}
+
+function makeCall(number) {
+	Linking.openURL("tel:" + number);
 }
 
 function ProviderScreen({ route, navigation }) {
@@ -63,7 +70,15 @@ function ProviderScreen({ route, navigation }) {
 					/>
 					<Text style={styles.providerRatings}>({reviews} Reviews)</Text>
 				</View>
-				<Text style={styles.providerPhone}>Phone Number: {phoneNumber}</Text>
+				<Text>
+					<Text style={styles.providerPhone}>Phone Number: </Text>
+					<Text
+						style={styles.providerPhoneNumber}
+						onPress={() => makeCall(phoneNumber)}
+					>
+						{phoneNumber}
+					</Text>
+				</Text>
 			</View>
 			<Image
 				style={styles.providerImage}
@@ -115,17 +130,23 @@ const styles = StyleSheet.create({
 		alignSelf: "center",
 	},
 	providerPhone: {
-		fontSize: 18,
+		fontSize: sizes.p,
+		color: colors.black,
+	},
+	providerPhoneNumber: {
+		fontSize: sizes.normal.p,
+		color: colors.primary,
+		textDecorationLine: "underline",
 	},
 	providerRatings: {
-		fontSize: 18,
+		fontSize: sizes.p,
 	},
 	providerTitle: {
 		fontWeight: "bold",
-		fontSize: 30,
+		fontSize: sizes.normal.h1,
 	},
 	providerWaitTime: {
-		fontSize: 16,
+		fontSize: sizes.normal.s,
 	},
 	containerRating: {
 		flexDirection: "row",
@@ -145,7 +166,7 @@ const styles = StyleSheet.create({
 	},
 	specialtyText: {
 		paddingLeft: 8,
-		fontSize: 28,
+		fontSize: sizes.normal.h1,
 		color: colors.white,
 	},
 });

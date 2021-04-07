@@ -6,6 +6,7 @@ import { AirbnbRating } from "react-native-elements";
 import PERSONS from "../config/personsDB";
 
 import colors from "../config/colors";
+import sizes from "../config/fontSizes";
 
 function CommentFragmentScreen(props) {
 	const persons = PERSONS;
@@ -51,15 +52,15 @@ const styles = StyleSheet.create({
 	rating: {},
 	reviewComment: {
 		marginLeft: 5,
-		fontSize: 20,
+		fontSize: sizes.normal.h2,
 	},
 	reviewerName: {
 		fontWeight: "bold",
-		fontSize: 18,
+		fontSize: sizes.p,
 	},
 	reviewTime: {
 		marginTop: 5,
-		fontSize: 14,
+		fontSize: sizes.normal.xs,
 	},
 });
 

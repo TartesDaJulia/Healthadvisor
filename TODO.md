@@ -1,6 +1,6 @@
 # Things to do
 
--   [ ] Connect to central services
+-   [ ] Connect to "central" services
 
 -   [ ] Create screens
     -   [x] Home Screen
@@ -21,11 +21,12 @@
 
 
 ----------------
+
 FEEDBACK
 
 - [ ] Show distance to provider
-- [ ] Phone number doesn't need to be in the list, only in details page (?)
-    - [ ] Phone number link to call directly from APP
+- [x] Phone number doesn't need to be in the list, only in details page (?)
+    - [x] Phone number link to call directly from APP
 - [ ] Have a tab with a map to show locations of providers nearby
 - [ ] Search Farmacias de serviço to compare apps. 
 - [ ] Urgent care / normal consultation

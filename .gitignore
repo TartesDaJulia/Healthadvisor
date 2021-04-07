@@ -102,3 +102,5 @@ dist
 
 # TernJS port file
 .tern-port
+.expo/web/cache/development/babel-loader/*
+.expo/web/cache/production/images/favicon/*

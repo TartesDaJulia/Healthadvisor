@@ -15,6 +15,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import ProviderFragmentScreen from "./ProviderFragmentScreen";
 
 import colors from "../config/colors";
+import sizes from "../config/fontSizes";
 import PROVIDERS from "../config/providersDB";
 import REVIEWS from "../config/ratingsDB";
 
@@ -92,9 +93,7 @@ function HomeScreen({ navigation }) {
 					style={styles.headerTouchable}
 					onPress={() =>
 						navigation.navigate("Profile", {
-							firstName: "John",
-							lastName: "Doe",
-							email: "johndoe@mail.com",
+							id: "2",
 						})
 					}
 				>
@@ -124,41 +123,41 @@ function HomeScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginLeft: 10,
-    marginRight: 10,
-    marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
-  },
-  headerContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  headerText: {
-    color: colors.primary,
-    fontWeight: "bold",
-    fontSize: 32,
-  },
-  headerTouchable: {
-    width: 30,
-  },
-  headerTouchableImage: {
-    width: 30,
-    height: 30,
-  },
-  nearYou: {
-    margin: 5,
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  providerList: {
-    //marginBottom: 110, //Have this due to a bug not showing last item, it remains hidden //fixed with flex:1 on container\
-  },
-  textInput: {},
-  textInputContainer: {
-    borderBottomColor: colors.black,
-    borderBottomWidth: 0.5,
-  },
+	container: {
+		flex: 1,
+		marginLeft: 10,
+		marginRight: 10,
+		marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+	},
+	headerContainer: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+	},
+	headerText: {
+		color: colors.primary,
+		fontWeight: "bold",
+		fontSize: sizes.normal.h1,
+	},
+	headerTouchable: {
+		width: 30,
+	},
+	headerTouchableImage: {
+		width: 30,
+		height: 30,
+	},
+	nearYou: {
+		margin: 5,
+		fontSize: sizes.normal.h2,
+		fontWeight: "bold",
+	},
+	providerList: {
+		//marginBottom: 110, //Have this due to a bug not showing last item, it remains hidden //fixed with flex:1 on container\
+	},
+	textInput: {},
+	textInputContainer: {
+		borderBottomColor: colors.black,
+		borderBottomWidth: 0.5,
+	},
 });
 
 export default HomeScreen;

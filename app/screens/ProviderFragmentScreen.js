@@ -11,7 +11,6 @@ function ProviderFragmentScreen(props) {
 			/>
 			<View style={styles.detailsContainer}>
 				<Text>{props.title}</Text>
-				<Text>Phone Number:{props.phoneNumber}</Text>
 				<Text>Estimated wait time: {props.waitTime}</Text>
 				<Text>
 					Rating: {props.rating}/5 ({props.reviews} Reviews)
@@ -29,6 +28,7 @@ const styles = StyleSheet.create({
 	},
 	detailsContainer: {
 		marginLeft: 5,
+		height: 100,
 	},
 	providerImage: {
 		width: 100,
