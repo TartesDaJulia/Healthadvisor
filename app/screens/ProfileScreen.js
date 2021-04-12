@@ -30,7 +30,7 @@ function ProfileScreen({ route, navigation }) {
 				<Text style={styles.details}>
 					{data.first} {data.last}
 				</Text>
-				<Text style={styles.details}> {data.email}</Text>
+				<Text style={styles.details}>{data.email}</Text>
 				{isLoading ? <ActivityIndicator /> : <Text> PERSON LOADED</Text>}
 			</View>
 		</View>
