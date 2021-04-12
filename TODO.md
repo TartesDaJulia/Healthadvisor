@@ -21,7 +21,15 @@
 
 
 ----------------
+API RELATED
 
+- [ ] Implement MAX for provider search
+- [ ] Continuous loading (?)
+
+
+
+
+-------------
 FEEDBACK
 
 - [ ] Show distance to provider

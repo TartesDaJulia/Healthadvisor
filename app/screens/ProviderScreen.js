@@ -43,7 +43,7 @@ function makeCall(number) {
 function ProviderScreen({ route, navigation }) {
 	const ratings = REVIEWS;
 
-	const { id, title, phoneNumber, waitTime, rating, reviews } = route.params;
+	const { id, title, phoneNumber, rating, image } = route.params;
 
 	const reviewsTreated = GetReviews(id);
 
@@ -61,6 +61,7 @@ function ProviderScreen({ route, navigation }) {
 			<View style={styles.detailsContainer}>
 				<Text style={styles.providerTitle}>{title}</Text>
 				<View style={styles.containerRating}>
+					<Text> {rating}</Text>
 					<AirbnbRating
 						defaultRating={rating}
 						size={20}
@@ -68,10 +69,10 @@ function ProviderScreen({ route, navigation }) {
 						showRating={false}
 						selectedColor={colors.primary}
 					/>
-					<Text style={styles.providerRatings}>({reviews} Reviews)</Text>
+					{/* <Text style={styles.providerRatings}>({reviews} Reviews)</Text> */}
 				</View>
 				<Text>
-					<Text style={styles.providerPhone}>Phone Number: </Text>
+					<Text style={styles.providerPhone}>Phone Number:</Text>
 					<Text
 						style={styles.providerPhoneNumber}
 						onPress={() => makeCall(phoneNumber)}
@@ -80,13 +81,10 @@ function ProviderScreen({ route, navigation }) {
 					</Text>
 				</Text>
 			</View>
-			<Image
-				style={styles.providerImage}
-				source={require("../assets/placeholder_image.png")}
-			/>
-			<Text style={styles.providerWaitTime}>
+			<Image style={styles.providerImage} source={{ uri: image }} />
+			{/* <Text style={styles.providerWaitTime}>
 				Estimated wait time: {waitTime}
-			</Text>
+			</Text> */}
 
 			<Pressable
 				android_ripple={{ color: "gray", borderless: false }}
@@ -128,6 +126,7 @@ const styles = StyleSheet.create({
 		width: 200,
 		height: 200,
 		alignSelf: "center",
+		marginBottom: 5,
 	},
 	providerPhone: {
 		fontSize: sizes.p,

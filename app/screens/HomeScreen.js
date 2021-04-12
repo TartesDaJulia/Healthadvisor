@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
+	ActivityIndicator,
 	TextInput,
 	View,
 	StyleSheet,
@@ -42,6 +43,20 @@ function CalculateReviews(institutionId) {
 }
 
 function HomeScreen({ navigation }) {
+	// Implemeting data requests to show providers.
+	const [isLoading, setLoading] = useState(true);
+	const [data, setData] = useState([]);
+
+	useEffect(() => {
+		fetch("http://192.168.1.99:3000/institution")
+			.then((response) => response.json())
+			.then((json) => {
+				setData(json);
+			})
+			.catch((error) => console.error(error))
+			.finally(() => setLoading(false));
+	}, []);
+
 	const DATA = PROVIDERS;
 	const ratings = REVIEWS;
 
@@ -62,11 +77,12 @@ function HomeScreen({ navigation }) {
 	const handleFragmentTouched = (item) => {
 		navigation.navigate("Provider", {
 			id: item.id,
-			title: item.title,
-			phoneNumber: item.phoneNumber,
-			waitTime: item.waitTime,
+			title: item.name,
+			phoneNumber: item.phone,
 			rating: item.rating,
-			reviews: item.reviews,
+			image: item.image,
+			// reviews: item.reviews,
+			// waitTime: item.waitTime,
 		});
 	};
 
@@ -76,11 +92,12 @@ function HomeScreen({ navigation }) {
 			onPress={() => handleFragmentTouched(item)}
 		>
 			<ProviderFragmentScreen
-				title={item.title}
-				phoneNumber={item.phoneNumber}
-				waitTime={item.waitTime}
+				title={item.name}
+				phoneNumber={item.phone}
+				//waitTime={item.waitTime}
 				rating={item.rating}
-				reviews={item.reviews}
+				reviews={item.rating}
+				image={item.image}
 			/>
 		</Pressable>
 	);
@@ -112,12 +129,16 @@ function HomeScreen({ navigation }) {
 				/>
 			</View>
 			<Text style={styles.nearYou}>Healthcare providers near you</Text>
-			<FlatList
-				style={styles.providerList}
-				data={DATA}
-				renderItem={renderItem}
-				keyExtractor={(item) => item.id}
-			/>
+			{isLoading ? (
+				<ActivityIndicator />
+			) : (
+				<FlatList
+					style={styles.providerList}
+					data={data}
+					renderItem={renderItem}
+					keyExtractor={(item) => item.id}
+				/>
+			)}
 		</View>
 	);
 }

@@ -5,16 +5,14 @@ import { Rating } from "react-native-ratings";
 function ProviderFragmentScreen(props) {
 	return (
 		<View style={styles.container}>
-			<Image
-				style={styles.providerImage}
-				source={require("../assets/placeholder_image.png")}
-			/>
+			<Image style={styles.providerImage} source={{ uri: props.image }} />
 			<View style={styles.detailsContainer}>
 				<Text>{props.title}</Text>
-				<Text>Estimated wait time: {props.waitTime}</Text>
-				<Text>
-					Rating: {props.rating}/5 ({props.reviews} Reviews)
-				</Text>
+				{/* <Text>Estimated wait time: {props.waitTime}</Text> */}
+				<Text>Rating: {props.rating}/5</Text>
+				{/* <Text>
+				({props.reviews} Reviews)
+				</Text> */}
 			</View>
 		</View>
 	);
