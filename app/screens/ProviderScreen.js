@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
+	ActivityIndicator,
 	View,
 	Text,
 	StyleSheet,
@@ -13,48 +14,44 @@ import * as Linking from "expo-linking";
 import Icon from "react-native-vector-icons/AntDesign";
 
 import CommentFragmentScreen from "./CommentFragmentScreen";
-import REVIEWS from "../config/ratingsDB";
 
 import colors from "../config/colors";
 import sizes from "../config/fontSizes";
-
-function GetReviews(id) {
-	console.log(id);
-	var reviews = new Array();
-	var i = 0;
-	REVIEWS.forEach((review) => {
-		if (id == review.institution) {
-			reviews.push({});
-			reviews[i].id = review.id;
-			reviews[i].person = review.person;
-			reviews[i].score = review.score;
-			reviews[i].comment = review.comment;
-			reviews[i].timeStamp = review.timeStamp;
-			i++;
-		}
-	});
-	return reviews;
-}
 
 function makeCall(number) {
 	Linking.openURL("tel:" + number);
 }
 
 function ProviderScreen({ route, navigation }) {
-	const ratings = REVIEWS;
+	// Implemeting data to show address
+	const [isLoadingAddress, setLoadingAddress] = useState(true);
+	const [isLoadingReviews, setLoadingReviews] = useState(true);
+	const [dataAddress, setDataAddress] = useState([]);
+	const [dataReviews, setDataReviews] = useState([]);
+
+	useEffect(() => {
+		fetch("http://192.168.1.99:3000/institution/" + id + "/locationshort")
+			.then((response) => response.json())
+			.then((json) => {
+				setDataAddress(json[0]);
+			})
+			.catch((error) => console.error(error))
+			.finally(() => setLoadingAddress(false));
+	}, []);
+
+	useEffect(() => {
+		fetch("http://192.168.1.99:3000/institution/" + id + "/ratingsid")
+			.then((response) => response.json())
+			.then((json) => {
+				setDataReviews(json);
+			})
+			.catch((error) => console.error(error))
+			.finally(() => setLoadingReviews(false));
+	}, []);
 
 	const { id, title, phoneNumber, rating, image } = route.params;
 
-	const reviewsTreated = GetReviews(id);
-
-	const renderItem = ({ item }) => (
-		<CommentFragmentScreen
-			person={item.person}
-			comment={item.comment}
-			timeStamp={item.timeStamp}
-			rating={item.score}
-		/>
-	);
+	const renderItem = ({ item }) => <CommentFragmentScreen id={item.id} />;
 
 	return (
 		<View style={styles.container}>
@@ -80,6 +77,19 @@ function ProviderScreen({ route, navigation }) {
 						{phoneNumber}
 					</Text>
 				</Text>
+				{isLoadingAddress ? (
+					<ActivityIndicator />
+				) : (
+					<View>
+						<Text>
+							{dataAddress.first} {dataAddress.second}
+							{dataAddress.second != "" ? dataAddress.second : " "}
+						</Text>
+						<Text>
+							{dataAddress.postal}, {dataAddress.locality}
+						</Text>
+					</View>
+				)}
 			</View>
 			<Image style={styles.providerImage} source={{ uri: image }} />
 			{/* <Text style={styles.providerWaitTime}>
@@ -88,7 +98,7 @@ function ProviderScreen({ route, navigation }) {
 
 			<Pressable
 				android_ripple={{ color: "gray", borderless: false }}
-				onPress={() => navigation.navigate("ProviderSpecialties", { id: id })}
+				onPress={() => navigation.navigate("Specialties Available", { id: id })}
 				style={styles.specialtyPressable}
 			>
 				<Text style={styles.specialtyText}>View Specialties available</Text>
@@ -99,12 +109,17 @@ function ProviderScreen({ route, navigation }) {
 					style={styles.specialtyIcon}
 				/>
 			</Pressable>
-			<FlatList
-				style={styles.reviewList}
-				data={reviewsTreated}
-				renderItem={renderItem}
-				keyExtractor={(item) => item.id}
-			/>
+
+			{isLoadingReviews ? (
+				<ActivityIndicator />
+			) : (
+				<FlatList
+					style={styles.reviewList}
+					data={dataReviews}
+					renderItem={renderItem}
+					keyExtractor={(item) => item.id}
+				/>
+			)}
 		</View>
 	);
 }

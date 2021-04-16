@@ -1,5 +1,5 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 
 import { AirbnbRating } from "react-native-elements";
 
@@ -9,31 +9,45 @@ import colors from "../config/colors";
 import sizes from "../config/fontSizes";
 
 function CommentFragmentScreen(props) {
-	const persons = PERSONS;
-	var name = "";
-
-	persons.forEach((per) => {
-		if (props.person == per.id) {
-			name = per.firstName + " " + per.lastName;
-		}
-	});
-	//persons.find((element) => props.person == element);
+	const [isLoading, setLoading] = useState(true);
+	const [data, setData] = useState([]);
+	let time = "";
+	//console.log("entered comment fragment with ID:" + id);
+	useEffect(() => {
+		fetch("http://192.168.1.99:3000/rating/" + props.id + "/full")
+			.then((response) => response.json())
+			.then((json) => {
+				setData(json[0]);
+			})
+			.catch((error) => console.error(error))
+			.finally(() => {
+				setLoading(false);
+			});
+	}, []);
 
 	return (
 		<View style={styles.container}>
-			<View style={styles.containerRating}>
-				<Text style={styles.reviewerName}>{name}</Text>
-				<AirbnbRating
-					style={styles.rating}
-					defaultRating={props.rating}
-					size={20}
-					isDisabled={true}
-					showRating={false}
-					selectedColor={colors.primary}
-				/>
-			</View>
-			<Text style={styles.reviewComment}>{props.comment}</Text>
-			<Text style={styles.reviewTime}>{props.timeStamp}</Text>
+			{isLoading ? (
+				<ActivityIndicator />
+			) : (
+				<View>
+					<View style={styles.containerRating}>
+						<Text style={styles.reviewerName}>
+							{data.first} {data.last}
+						</Text>
+						<AirbnbRating
+							style={styles.rating}
+							defaultRating={data.score}
+							size={20}
+							isDisabled={true}
+							showRating={false}
+							selectedColor={colors.primary}
+						/>
+					</View>
+					<Text style={styles.reviewComment}>{data.text}</Text>
+					<Text style={styles.reviewTime}>{data.time}</Text>
+				</View>
+			)}
 		</View>
 	);
 }

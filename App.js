@@ -42,7 +42,7 @@ export default function App() {
 					}}
 				/>
 				<Stack.Screen
-					name="ProviderSpecialties"
+					name="Specialties Available"
 					component={SpecialtiesScreen}
 					options={{
 						headerTintColor: colors.primary,

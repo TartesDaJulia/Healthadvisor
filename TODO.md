@@ -1,12 +1,12 @@
 # Things to do
 
--   [ ] Connect to "central" services
+-   [x] Connect to "central" services
 
 -   [ ] Create screens
     -   [x] Home Screen
     -   [x] Institution details screen
         -   [x] List with comments and ratings
-    -   [ ] Institution specialties screen
+    -   [x] Institution specialties screen
     -   [ ] Institution editing screen
     -   [x] Profile details screen
     -   [ ] Profile editing screen

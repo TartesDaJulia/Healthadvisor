@@ -1,47 +1,47 @@
-import React from "react";
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+	ActivityIndicator,
+	StyleSheet,
+	Text,
+	View,
+	FlatList,
+} from "react-native";
 import { Card } from "react-native-elements";
 
-import availableSpecialties from "../config/institutionSpecialtiesDB";
-import specialtyNames from "../config/specialtiesDB";
+function SpecialtiesScreen({ route, navigation }) {
+	const [isLoading, setLoading] = useState(true);
+	const [data, setData] = useState([]);
 
-export default function SpecialtiesScreen({ route, navigation }) {
+	useEffect(() => {
+		fetch("http://192.168.1.99:3000/institution/" + id.id + "/specialties")
+			.then((response) => response.json())
+			.then((json) => {
+				setData(json);
+			})
+			.catch((error) => console.error(error))
+			.finally(() => setLoading(false));
+	}, []);
+
 	const id = route.params;
-
-	var specialties = [];
-
-	for (let i = 0; i < availableSpecialties.length; i++) {
-		const element = availableSpecialties[i];
-		if (parseInt(availableSpecialties[i].institution) == id.id) {
-			specialties.push(availableSpecialties[i].specialty);
-		}
-	}
-
-	var names = [];
-
-	specialties.forEach((specialty) => {
-		const name = specialtyNames.find(
-			(element) => parseInt(element.id) == specialty
-		);
-		names.push(name.name);
-	});
-
-	console.log(names);
 
 	const renderItem = ({ item }) => (
 		<Card>
-			<Card.Title>{item}</Card.Title>
+			<Card.Title>{item.specialty}</Card.Title>
 		</Card>
 	);
 
 	return (
 		<View>
-			<FlatList
-				style={styles.providerList}
-				data={names}
-				renderItem={renderItem}
-				keyExtractor={(item) => item}
-			/>
+			{isLoading ? (
+				<ActivityIndicator />
+			) : (
+				<FlatList
+					style={styles.providerList}
+					data={data}
+					renderItem={renderItem}
+					keyExtractor={(item) => item.id}
+				/>
+			)}
 		</View>
 	);
 }
@@ -49,3 +49,5 @@ export default function SpecialtiesScreen({ route, navigation }) {
 const styles = StyleSheet.create({
 	providerList: {},
 });
+
+export default SpecialtiesScreen;

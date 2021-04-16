@@ -92,6 +92,7 @@ function HomeScreen({ navigation }) {
 			onPress={() => handleFragmentTouched(item)}
 		>
 			<ProviderFragmentScreen
+				id={item.id}
 				title={item.name}
 				phoneNumber={item.phone}
 				//waitTime={item.waitTime}
