@@ -7,6 +7,8 @@ import HomeScreen from "./app/screens/HomeScreen";
 import ProfileScreen from "./app/screens/ProfileScreen";
 import ProviderScreen from "./app/screens/ProviderScreen";
 import SpecialtiesScreen from "./app/screens/SpecialtiesScreen";
+import LoginScreen from "./app/screens/LoginScreen";
+import RegisterScreen from "./app/screens/RegisterScreen";
 
 import colors from "./app/config/colors";
 
@@ -16,6 +18,16 @@ export default function App() {
 	return (
 		<NavigationContainer>
 			<Stack.Navigator>
+				<Stack.Screen
+					name="Login"
+					component={LoginScreen}
+					options={{ title: "Healthadvisor", headerShown: false }}
+				/>
+				<Stack.Screen
+					name="Register"
+					component={RegisterScreen}
+					options={{ title: "Healthadvisor", headerShown: false }}
+				/>
 				<Stack.Screen
 					name="Home"
 					component={HomeScreen}

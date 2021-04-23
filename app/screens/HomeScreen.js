@@ -57,16 +57,6 @@ function HomeScreen({ navigation }) {
 			.finally(() => setLoading(false));
 	}, []);
 
-	const DATA = PROVIDERS;
-	const ratings = REVIEWS;
-
-	var instReviews = 0;
-	var instRating = 0;
-	DATA.forEach((inst) => {
-		[instReviews, instRating] = CalculateReviews(inst.id);
-		inst.reviews = instReviews;
-		inst.rating = instRating;
-	});
 
 	const [searchText, setSearchText] = useState("");
 

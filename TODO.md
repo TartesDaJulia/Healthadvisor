@@ -12,8 +12,8 @@
     -   [ ] Profile editing screen
     -   [ ] Settings screen
 
-    -   [ ] Login/Register screen
-
+    -   [x] Login screen
+    -   [ ] Register screen
 -   [ ] Implement search
 
 ----------------
