@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
 	ActivityIndicator,
+	Alert,
 	StyleSheet,
 	Text,
 	View,
@@ -24,11 +25,21 @@ function SpecialtiesScreen({ route, navigation }) {
 
 	const id = route.params;
 
-	const renderItem = ({ item }) => (
-		<Card>
-			<Card.Title>{item.specialty}</Card.Title>
-		</Card>
-	);
+	function renderItem({ item }) {
+		var text = "";
+		console.log(item.specialty);
+		if (item.specialty != "") {
+			text = item.specialty;
+		} else {
+			text = "No specialty available";
+		}
+
+		return (
+			<Card>
+				<Card.Title>{text}</Card.Title>
+			</Card>
+		);
+	}
 
 	return (
 		<View>

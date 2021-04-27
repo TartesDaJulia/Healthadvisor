@@ -35,57 +35,29 @@ function makeCall(number) {
 	Linking.openURL("tel:" + number);
 }
 
-function ProviderScreen({ route, navigation }) {
-	// Implemeting data to show address
-	const [isLoadingAddress, setLoadingAddress] = useState(true);
-	const [isLoadingReviews, setLoadingReviews] = useState(true);
-	const [dataAddress, setDataAddress] = useState([]);
-	const [dataReviews, setDataReviews] = useState([]);
+function getFullDate() {
+	var d = new Date();
 
-	useEffect(() => {
-		fetch("http://192.168.1.99:3000/institution/" + id + "/locationshort")
-			.then((response) => response.json())
-			.then((json) => {
-				setDataAddress(json[0]);
-			})
-			.catch((error) => console.error(error))
-			.finally(() => setLoadingAddress(false));
-	}, []);
+	var time =
+		d.getUTCFullYear() +
+		"-" +
+		d.getUTCMonth() +
+		"-" +
+		d.getUTCDate() +
+		"T" +
+		d.getUTCHours() +
+		":" +
+		d.getUTCMinutes() +
+		":" +
+		d.getUTCSeconds();
+	return time;
+}
 
-	useEffect(() => {
-		fetch("http://192.168.1.99:3000/institution/" + id + "/ratingsid")
-			.then((response) => response.json())
-			.then((json) => {
-				setDataReviews(json);
-			})
-			.catch((error) => console.error(error))
-			.finally(() => setLoadingReviews(false));
-	}, []);
-
+function ProviderContent(route, navigation, isLoadingAddress, dataAddress) {
 	const { id, title, phoneNumber, rating, image } = route.params;
 
-	const renderItem = ({ item }) => <CommentFragmentScreen id={item.id} />;
-
-	function getFullDate() {
-		var d = new Date();
-
-		var time =
-			d.getUTCFullYear() +
-			"-" +
-			d.getUTCMonth() +
-			"-" +
-			d.getUTCDate() +
-			"T" +
-			d.getUTCHours() +
-			":" +
-			d.getUTCMinutes() +
-			":" +
-			d.getUTCSeconds();
-		return time;
-	}
-
 	return (
-		<KeyboardAwareScrollView>
+		<View>
 			{/* Show provider information */}
 			<View style={styles.detailsContainer}>
 				<Text style={styles.providerTitle}>{title}</Text>
@@ -198,9 +170,49 @@ function ProviderScreen({ route, navigation }) {
 					)}
 				</Formik>
 			</View>
+		</View>
+	);
+}
+
+function ProviderScreen({ route, navigation }) {
+	// get params from route
+	const { id, title, phoneNumber, rating, image } = route.params;
+	// Implemeting hooks to show address
+	const [isLoadingAddress, setLoadingAddress] = useState(true);
+	const [dataAddress, setDataAddress] = useState([]);
+
+	useEffect(() => {
+		fetch("http://192.168.1.99:3000/institution/" + id + "/locationshort")
+			.then((response) => response.json())
+			.then((json) => {
+				setDataAddress(json[0]);
+			})
+			.catch((error) => console.error(error))
+			.finally(() => setLoadingAddress(false));
+	}, []);
+
+	// Implemeting hooks to show reviews
+
+	const [isLoadingReviews, setLoadingReviews] = useState(true);
+	const [dataReviews, setDataReviews] = useState([]);
+
+	useEffect(() => {
+		fetch("http://192.168.1.99:3000/institution/" + id + "/ratingsid")
+			.then((response) => response.json())
+			.then((json) => {
+				setDataReviews(json);
+			})
+			.catch((error) => console.error(error))
+			.finally(() => setLoadingReviews(false));
+	}, []);
+
+	const renderItem = ({ item }) => <CommentFragmentScreen id={item.id} />;
+
+	return (
+		<View>
 			{/* End of new review section */}
 			{/* Now load the existing reviews*/}
-			{isLoadingReviews ? (
+			{isLoadingReviews && isLoadingAddress ? (
 				<ActivityIndicator />
 			) : (
 				<FlatList
@@ -208,10 +220,15 @@ function ProviderScreen({ route, navigation }) {
 					data={dataReviews}
 					renderItem={renderItem}
 					keyExtractor={(item) => item.id}
-					// ListHeaderComponent={ContentThatGoesAboveTheFlatList}
+					ListHeaderComponent={ProviderContent(
+						route,
+						navigation,
+						isLoadingAddress,
+						dataAddress
+					)}
 				/>
 			)}
-		</KeyboardAwareScrollView>
+		</View>
 	);
 }
 
@@ -242,7 +259,9 @@ const styles = StyleSheet.create({
 
 		marginBottom: 20,
 	},
-	newReviewInput: {},
+	newReviewInput: {
+		minHeight: 50,
+	},
 	providerImage: {
 		width: 200,
 		height: 200,
