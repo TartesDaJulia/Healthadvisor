@@ -1,15 +1,28 @@
 import React, { useEffect, useState } from "react";
 import {
 	ActivityIndicator,
+	Button,
+	FlatList,
+	Image,
+	Keyboard,
+	KeyboardAvoidingView,
+	Pressable,
 	View,
 	Text,
+	TextInput,
+	TouchableWithoutFeedback,
 	StyleSheet,
-	Image,
-	FlatList,
-	Pressable,
 } from "react-native";
-import { AirbnbRating } from "react-native-elements";
+
+// import { AirbnbRating } from "react-native-elements";
+
+import { Rating, AirbnbRating } from "react-native-ratings";
+
 import * as Linking from "expo-linking";
+
+import { Formik, Field, Form } from "formik";
+
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import Icon from "react-native-vector-icons/AntDesign";
 
@@ -53,23 +66,44 @@ function ProviderScreen({ route, navigation }) {
 
 	const renderItem = ({ item }) => <CommentFragmentScreen id={item.id} />;
 
+	function getFullDate() {
+		var d = new Date();
+
+		var time =
+			d.getUTCFullYear() +
+			"-" +
+			d.getUTCMonth() +
+			"-" +
+			d.getUTCDate() +
+			"T" +
+			d.getUTCHours() +
+			":" +
+			d.getUTCMinutes() +
+			":" +
+			d.getUTCSeconds();
+		return time;
+	}
+
 	return (
-		<View style={styles.container}>
+		<KeyboardAwareScrollView>
+			{/* Show provider information */}
 			<View style={styles.detailsContainer}>
 				<Text style={styles.providerTitle}>{title}</Text>
 				<View style={styles.containerRating}>
 					<Text> {rating}</Text>
 					<AirbnbRating
-						defaultRating={rating}
+						defaultRating={parseFloat(rating)}
 						size={20}
 						isDisabled={true}
 						showRating={false}
 						selectedColor={colors.primary}
 					/>
+
 					{/* <Text style={styles.providerRatings}>({reviews} Reviews)</Text> */}
 				</View>
 				<Text>
 					<Text style={styles.providerPhone}>Phone Number:</Text>
+					{/* Make clickable phone number */}
 					<Text
 						style={styles.providerPhoneNumber}
 						onPress={() => makeCall(phoneNumber)}
@@ -93,9 +127,9 @@ function ProviderScreen({ route, navigation }) {
 			</View>
 			<Image style={styles.providerImage} source={{ uri: image }} />
 			{/* <Text style={styles.providerWaitTime}>
-				Estimated wait time: {waitTime}
-			</Text> */}
-
+		Estimated wait time: {waitTime}
+	</Text> */}
+			{/* Button to show provider specialties available */}
 			<Pressable
 				android_ripple={{ color: "gray", borderless: false }}
 				onPress={() => navigation.navigate("Specialties Available", { id: id })}
@@ -109,7 +143,63 @@ function ProviderScreen({ route, navigation }) {
 					style={styles.specialtyIcon}
 				/>
 			</Pressable>
-
+			{/* New review section */}
+			<View>
+				<Formik
+					initialValues={{
+						score: "3",
+						text: "",
+						time: "",
+						person: "",
+					}}
+					onSubmit={async (values) => {
+						var time = getFullDate();
+						fetch("http://192.168.1.99:3000/rating/", {
+							method: "POST",
+							headers: { "Content-Type": "application/json" },
+							body: JSON.stringify({
+								score: String(values.score),
+								text: values.text,
+								time: time,
+								person: "1",
+								institution: id,
+							}),
+						})
+							.then((response) => response.json())
+							.catch((error) => console.error(error))
+							.finally(() => console.log("yay"));
+					}}
+				>
+					{({ handleChange, handleSubmit, values }) => (
+						<View style={styles.newReviewContainer}>
+							<AirbnbRating
+								defaultRating={3}
+								size={30}
+								showRating={false}
+								selectedColor={colors.primary}
+								unSelectedColor={colors.gray}
+								onFinishRating={(score) => {
+									values.score = score;
+								}}
+							/>
+							<TextInput
+								onChangeText={handleChange("text")}
+								value={values.text}
+								style={styles.newReviewInput}
+								placeholder="Comment about your experience here"
+							/>
+							<Button
+								onPress={handleSubmit}
+								title="Submit"
+								color={colors.primary}
+								style={styles.newReviewButton}
+							/>
+						</View>
+					)}
+				</Formik>
+			</View>
+			{/* End of new review section */}
+			{/* Now load the existing reviews*/}
 			{isLoadingReviews ? (
 				<ActivityIndicator />
 			) : (
@@ -118,9 +208,10 @@ function ProviderScreen({ route, navigation }) {
 					data={dataReviews}
 					renderItem={renderItem}
 					keyExtractor={(item) => item.id}
+					// ListHeaderComponent={ContentThatGoesAboveTheFlatList}
 				/>
 			)}
-		</View>
+		</KeyboardAwareScrollView>
 	);
 }
 
@@ -134,9 +225,24 @@ const styles = StyleSheet.create({
 		marginRight: 10,
 		marginTop: 10,
 	},
+	containerRating: {
+		flexDirection: "row",
+	},
 	detailsContainer: {
 		marginLeft: 5,
 	},
+	newReviewButton: {},
+	newReviewContainer: {
+		borderStyle: "solid",
+		borderWidth: 1,
+		borderRadius: 5,
+		borderColor: colors.primary,
+
+		margin: 5,
+
+		marginBottom: 20,
+	},
+	newReviewInput: {},
 	providerImage: {
 		width: 200,
 		height: 200,
@@ -162,9 +268,6 @@ const styles = StyleSheet.create({
 	providerWaitTime: {
 		fontSize: sizes.normal.s,
 	},
-	containerRating: {
-		flexDirection: "row",
-	},
 	reviewList: {},
 	specialtyPressable: {
 		elevation: 8,
@@ -174,6 +277,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "space-between",
 		maxHeight: 50,
+		minHeight: 50,
 	},
 	specialtyIcon: {
 		paddingRight: 8,
