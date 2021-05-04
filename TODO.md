@@ -15,11 +15,13 @@
     -   [ ] Settings screen
 
     -   [x] Login screen
-    -   [ ] Register screen
--   [ ] Implement search
+    -   [x] Register screen
+-   [x] Implement search
 
 ----------------
+
 - [x] Fix numReviews in CalculateReviews 
+
 
 
 ----------------

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
 	ActivityIndicator,
+	Alert,
 	TextInput,
 	View,
 	StyleSheet,
@@ -17,32 +18,20 @@ import ProviderFragmentScreen from "./ProviderFragmentScreen";
 
 import colors from "../config/colors";
 import sizes from "../config/fontSizes";
-import PROVIDERS from "../config/providersDB";
-import REVIEWS from "../config/ratingsDB";
 
-function CalculateReviews(institutionId) {
-	const ratings = REVIEWS;
-
-	var total = 0;
-	var sum = 0;
-	var rating = 0;
-
-	ratings.forEach((review) => {
-		if (review.institution == institutionId) {
-			total = total + 1;
-			sum = sum + parseInt(review.score);
-		}
-	});
-
-	if (total != 0) {
-		rating = sum / total;
-		rating = Math.round(rating);
-	}
-
-	return [total, rating];
+function newAction(userID, action, text) {
+	console.log("Called new action");
+	return JSON.parse(
+		`{
+			"id":"${userID}",
+			"${action}":"${text}"	
+		}`
+	);
 }
 
 function HomeScreen({ navigation }) {
+	const userID = "1";
+	////////////////////////////////////////////////////////////////////////
 	// Implemeting data requests to show providers.
 	const [isLoading, setLoading] = useState(true);
 	const [data, setData] = useState([]);
@@ -56,15 +45,54 @@ function HomeScreen({ navigation }) {
 			.catch((error) => console.error(error))
 			.finally(() => setLoading(false));
 	}, []);
+	////////////////////////////////////////////////////////////////////////
+	//implemeting logging for recomender system
+	const [log, setLog] = useState([]);
 
+	function printLogger() {
+		var d = new Date();
+		var time =
+			d.getUTCHours() + ":" + d.getUTCMinutes() + ":" + d.getUTCSeconds();
+		console.log("PRINTING LOGGER ----" + time + "-----");
+		console.log(log);
+	}
 
+	//useEffect to print logger every x seconds
+	// useEffect(() => {
+	// 	const interval = setInterval(() => {
+	// 		printLogger(log);
+	// 	}, 5000);
+	// 	return () => clearInterval(interval);
+	// }, []);
+	////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////
+	// Implementing search function
 	const [searchText, setSearchText] = useState("");
 
 	const handleSearchSubmit = () => {
-		console.log({ searchText });
+		// check if searchText has been filled, if not-> alert user
+		if (searchText != "") {
+			fetch("http://192.168.1.99:3000/institution/search/" + searchText)
+				.then((response) => response.json())
+				.then((json) => {
+					setData(json);
+				})
+				.catch((error) => console.error(error))
+				.finally(() => setLoading(false));
+		} else {
+			Alert.alert("Search", "Please insert a search term", [{ text: "OK" }]);
+		}
 	};
+	////////////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////////////
+	//Handling selected institution from list provided
 
 	const handleFragmentTouched = (item) => {
+		// var action = newAction(userID, "clickedInstitution", item.id);
+		// setLog([...log, action]);
+
 		navigation.navigate("Provider", {
 			id: item.id,
 			title: item.name,
@@ -92,6 +120,7 @@ function HomeScreen({ navigation }) {
 			/>
 		</Pressable>
 	);
+	////////////////////////////////////////////////////////////////////////
 
 	return (
 		<View style={styles.container}>
