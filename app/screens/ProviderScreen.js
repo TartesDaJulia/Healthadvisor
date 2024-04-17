@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
 	ActivityIndicator,
+	Alert,
 	Button,
 	FlatList,
 	Image,
@@ -124,7 +125,7 @@ function ProviderContent(route, navigation, isLoadingAddress, dataAddress) {
 						time: "",
 						person: "",
 					}}
-					onSubmit={async (values) => {
+					onSubmit={async (values, { setSubmitting, resetForm }) => {
 						var time = getFullDate();
 						fetch("http://192.168.1.99:3000/rating/", {
 							method: "POST",
@@ -139,7 +140,12 @@ function ProviderContent(route, navigation, isLoadingAddress, dataAddress) {
 						})
 							.then((response) => response.json())
 							.catch((error) => console.error(error))
-							.finally(() => console.log("yay"));
+							.finally(() => {
+								resetForm({});
+								Alert.alert("Review Received", "Thank you", [
+									{ text: "OK", onPress: () => console.log("OK Pressed") },
+								]);
+							});
 					}}
 				>
 					{({ handleChange, handleSubmit, values }) => (
